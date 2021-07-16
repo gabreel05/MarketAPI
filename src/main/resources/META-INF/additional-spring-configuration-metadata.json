@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "sprint-evaluation-4.jwt.expiration",
-  "type": "java.lang.String",
-  "description": "A description for 'sprint-evaluation-4.jwt.expiration'"
-}]}
+{"properties": [
+  {
+    "name": "sprint-evaluation-4.jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'sprint-evaluation-4.jwt.expiration'"
+  },
+  {
+    "name": "sprint-evaluation-4.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'sprint-evaluation-4.jwt.secret'"
+  }
+]}

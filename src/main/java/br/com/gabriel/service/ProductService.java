@@ -22,8 +22,14 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
-	public Page<ProductResponse> findAll(Pageable pagination) {
-		Page<Product> products = productRepository.findAll(pagination);
+	public Page<ProductResponse> findAll(String description, Pageable pagination) {
+		Page<Product> products;
+		
+		if (!description.isEmpty()) {
+			products = productRepository.findByDescription(description, pagination);
+		} else {
+			products = productRepository.findAll(pagination);
+		}
 
 		return ProductResponse.toProduct(products);
 	}

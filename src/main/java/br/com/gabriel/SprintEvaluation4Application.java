@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import br.com.gabriel.model.Demand;
 import br.com.gabriel.model.Product;
@@ -15,6 +16,7 @@ import br.com.gabriel.repository.ProductRepository;
 import br.com.gabriel.repository.UserRepository;
 
 @SpringBootApplication
+@EnableSpringDataWebSupport
 public class SprintEvaluation4Application implements CommandLineRunner {
 
 	private ProductRepository productRepository;
