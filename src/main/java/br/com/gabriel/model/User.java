@@ -28,7 +28,6 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	
 	public User(String username, String password) {
-		super();
 		this.username = username;
 		this.password = password;
 	}

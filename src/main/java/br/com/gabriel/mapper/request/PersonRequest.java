@@ -6,6 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import br.com.gabriel.model.Address;
 import br.com.gabriel.model.Person;
 import br.com.gabriel.repository.AddressRepository;
@@ -18,6 +20,7 @@ public class PersonRequest {
 	@NotBlank
 	private String name;
 	@NotBlank
+	@CPF
 	private String document;
 	@NotNull
 	@Positive

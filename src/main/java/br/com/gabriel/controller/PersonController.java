@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,28 +31,20 @@ import br.com.gabriel.service.PersonService;
 @RequestMapping("/persons")
 public class PersonController {
 
-	@Autowired
 	private PersonService personService;
 
-	/*
-	 * public PersonController(PersonService personService) { this.personService =
-	 * personService; }
-	 */
-
-	@PostMapping
-	@Transactional
-	public ResponseEntity<PersonResponse> save(@RequestBody @Valid PersonRequest personRequest,
-			UriComponentsBuilder uriComponentsBuilder) {
-		PersonResponse person = personService.save(personRequest);
-
-		URI uri = uriComponentsBuilder.path("/persons/{id}").buildAndExpand(person.getId()).toUri();
-
-		return ResponseEntity.created(uri).body(person);
+	@Autowired
+	public PersonController(PersonService personService) {
+		this.personService = personService;
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<PersonResponse>> findAll(@PageableDefault Pageable pagination) {
-		Page<PersonResponse> persons = personService.findAll(pagination);
+	public ResponseEntity<Page<PersonResponse>> findAll(
+			@RequestParam(required = false, defaultValue = "") String name,
+			@RequestParam(required = false, defaultValue = "") String gender,
+			@PageableDefault Pageable pagination
+	) {
+		Page<PersonResponse> persons = personService.findAll(name, gender, pagination);
 
 		return ResponseEntity.ok().body(persons);
 	}
@@ -64,12 +57,23 @@ public class PersonController {
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
+	@PostMapping
+	@Transactional
+	public ResponseEntity<PersonResponse> save(@RequestBody @Valid PersonRequest personRequest,
+			UriComponentsBuilder uriComponentsBuilder) {
+		PersonResponse person = personService.save(personRequest);
+
+		URI uri = uriComponentsBuilder.path("/persons/{id}").buildAndExpand(person.getId()).toUri();
+
+		return ResponseEntity.created(uri).body(person);
+	}
+
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<PersonResponse> update(@PathVariable Long id,
 			@RequestBody @Valid PersonRequest personRequest) {
 		PersonResponse person = personService.update(id, personRequest);
-		
+
 		return ResponseEntity.ok().body(person);
 	}
 
