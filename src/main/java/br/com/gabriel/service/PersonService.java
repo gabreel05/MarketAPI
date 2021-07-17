@@ -62,13 +62,13 @@ public class PersonService {
 	public PersonResponse update(Long id, PersonRequest personRequest) {
 		Optional<Person> optional = findPerson(id);
 
-		if (optional.isPresent()) {
-			Person person = personRequest.update(id, personRepository, addressRepository);
+		Person person = null;
 
-			return new PersonResponse(person);
+		if (optional.isPresent()) {
+			person = personRequest.update(id, personRepository, addressRepository);
 		}
 
-		return null;
+		return new PersonResponse(person);
 	}
 
 	public void deletePerson(Long id) {

@@ -49,13 +49,13 @@ public class ProductService {
 	public ProductResponse update(Long id, ProductRequest productRequest) {
 		Optional<Product> optional = findProduct(id);
 
+		Product product = null;
+		
 		if (optional.isPresent()) {
-			Product product = productRequest.update(id, productRepository);
-			
-			return new ProductResponse(product);
+			product = productRequest.update(id, productRepository);
 		}
 
-		return null;
+		return new ProductResponse(product);
 	}
 
 	public void deleteProduct(Long id) {

@@ -46,13 +46,13 @@ public class DemandService {
 	public DemandResponse update(Long id, DemandRequest demandRequest) {
 		Optional<Demand> optional = findDemand(id);
 
-		if (optional.isPresent()) {
-			Demand demand = demandRequest.update(id, demandRepository, productRepository);
+		Demand demand = null;
 
-			return new DemandResponse(demand);
+		if (optional.isPresent()) {
+			demand = demandRequest.update(id, demandRepository, productRepository);
 		}
 
-		return null;
+		return new DemandResponse(demand);
 	}
 
 	public void deleteDemand(Long id) {
