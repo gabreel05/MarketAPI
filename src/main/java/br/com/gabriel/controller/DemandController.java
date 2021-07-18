@@ -1,7 +1,6 @@
 package br.com.gabriel.controller;
 
 import java.net.URI;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.DemandRequest;
 import br.com.gabriel.mapper.response.DemandResponse;
 import br.com.gabriel.model.Demand;
@@ -47,10 +45,9 @@ public class DemandController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<DemandResponse> findDemand(@PathVariable Long id) {
-		Optional<Demand> demand = demandService.findDemand(id);
+		Demand demand = demandService.findDemand(id);
 
-		return demand.map(value -> ResponseEntity.ok().body(new DemandResponse(value)))
-				.orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
+		return ResponseEntity.ok().body(new DemandResponse(demand));
 	}
 
 	@PutMapping("/{id}")

@@ -1,7 +1,5 @@
 package br.com.gabriel.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +33,8 @@ public class ProductService {
 		return ProductResponse.toProduct(products);
 	}
 
-	public Optional<Product> findProduct(Long id) {
-		return productRepository.findById(id);
+	public Product findProduct(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
 	}
 
 	public ProductResponse save(ProductRequest productRequest) {
@@ -48,7 +46,7 @@ public class ProductService {
 	}
 
 	public ProductResponse update(Long id, ProductRequest productRequest) {
-		Product product = findById(id);
+		Product product = findProduct(id);
 
 		product = productRequest.update(id, productRepository);
 
@@ -56,11 +54,8 @@ public class ProductService {
 	}
 
 	public void deleteProduct(Long id) {
-		productRepository.deleteById(id);
+		Product product = findProduct(id);
+		
+		productRepository.delete(product);
 	}
-
-	public Product findById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
-	}
-
 }

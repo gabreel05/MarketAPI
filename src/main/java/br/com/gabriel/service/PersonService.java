@@ -1,7 +1,5 @@
 package br.com.gabriel.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,10 +42,8 @@ public class PersonService {
 		return PersonResponse.toPerson(persons);
 	}
 
-	public Optional<Person> findPerson(Long id) {
-		Optional<Person> person = personRepository.findById(id);
-
-		return person;
+	public Person findPerson(Long id) {
+		return personRepository.findById(id).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
 	}
 
 	public PersonResponse save(PersonRequest personRequest) {
@@ -61,7 +57,7 @@ public class PersonService {
 	}
 
 	public PersonResponse update(Long id, PersonRequest personRequest) {
-		Person person = findById(id);
+		Person person = findPerson(id);
 
 		person = personRequest.update(id, personRepository, addressRepository);
 
@@ -69,11 +65,8 @@ public class PersonService {
 	}
 
 	public void deletePerson(Long id) {
-		personRepository.deleteById(id);
+		Person person = findPerson(id);
+		
+		personRepository.delete(person);
 	}
-	
-	public Person findById(Long id) {
-		return personRepository.findById(id).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
-	}
-
 }

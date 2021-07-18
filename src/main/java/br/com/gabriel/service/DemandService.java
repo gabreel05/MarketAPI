@@ -1,7 +1,5 @@
 package br.com.gabriel.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +30,8 @@ public class DemandService {
 		return DemandResponse.toDemand(demands);
 	}
 
-	public Optional<Demand> findDemand(Long id) {
-		return demandRepository.findById(id);
+	public Demand findDemand(Long id) {
+		return demandRepository.findById(id).orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
 	}
 
 	public DemandResponse save(DemandRequest demandRequest) {
@@ -45,7 +43,7 @@ public class DemandService {
 	}
 
 	public DemandResponse update(Long id, DemandRequest demandRequest) {
-		Demand demand = findById(id);
+		Demand demand = findDemand(id);
 
 		demand = demandRequest.update(id, demandRepository, productRepository);
 
@@ -53,11 +51,9 @@ public class DemandService {
 	}
 
 	public void deleteDemand(Long id) {
-		demandRepository.deleteById(id);
-	}
-
-	public Demand findById(Long id) {
-		return demandRepository.findById(id).orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
+		Demand demand = findDemand(id);
+		
+		demandRepository.delete(demand);
 	}
 
 }

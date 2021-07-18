@@ -1,7 +1,6 @@
 package br.com.gabriel.controller;
 
 import java.net.URI;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.ProductRequest;
 import br.com.gabriel.mapper.response.ProductResponse;
 import br.com.gabriel.model.Product;
@@ -51,10 +49,9 @@ public class ProductController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductResponse> findProduct(@PathVariable Long id) {
-		Optional<Product> product = productService.findProduct(id);
+		Product product = productService.findProduct(id);
 
-		return product.map(value -> ResponseEntity.ok().body(new ProductResponse(value)))
-				.orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+		return ResponseEntity.ok().body(new ProductResponse(product));
 	}
 
 	@PostMapping
