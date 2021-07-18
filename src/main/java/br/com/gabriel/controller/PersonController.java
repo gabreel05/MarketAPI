@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.PersonRequest;
 import br.com.gabriel.mapper.response.PersonResponse;
 import br.com.gabriel.model.Person;
@@ -54,7 +55,7 @@ public class PersonController {
 		Optional<Person> person = personService.findPerson(id);
 
 		return person.map(value -> ResponseEntity.ok().body(new PersonResponse(value)))
-				.orElseGet(() -> ResponseEntity.notFound().build());
+				.orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
 	}
 
 	@PostMapping

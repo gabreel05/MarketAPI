@@ -39,9 +39,7 @@ public class AuthController {
 		try {
 			Authentication authentication = authManager.authenticate(data);
 			String token = tokenService.generateToken(authentication);
-			
-			System.out.println(token);
-			
+						
 			return ResponseEntity.ok().body(new TokenResponse(token, "Bearer"));
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();

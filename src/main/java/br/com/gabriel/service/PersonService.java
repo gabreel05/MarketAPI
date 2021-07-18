@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.PersonRequest;
 import br.com.gabriel.mapper.response.PersonResponse;
 import br.com.gabriel.model.Person;
@@ -60,19 +61,19 @@ public class PersonService {
 	}
 
 	public PersonResponse update(Long id, PersonRequest personRequest) {
-		Optional<Person> optional = findPerson(id);
+		Person person = findById(id);
 
-		Person person = null;
-
-		if (optional.isPresent()) {
-			person = personRequest.update(id, personRepository, addressRepository);
-		}
+		person = personRequest.update(id, personRepository, addressRepository);
 
 		return new PersonResponse(person);
 	}
 
 	public void deletePerson(Long id) {
 		personRepository.deleteById(id);
+	}
+	
+	public Person findById(Long id) {
+		return personRepository.findById(id).orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
 	}
 
 }

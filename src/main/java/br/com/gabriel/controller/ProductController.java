@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.ProductRequest;
 import br.com.gabriel.mapper.response.ProductResponse;
 import br.com.gabriel.model.Product;
@@ -53,7 +54,7 @@ public class ProductController {
 		Optional<Product> product = productService.findProduct(id);
 
 		return product.map(value -> ResponseEntity.ok().body(new ProductResponse(value)))
-				.orElseGet(() -> ResponseEntity.notFound().build());
+				.orElseThrow(() -> new NotFoundException("Produto não encontrado"));
 	}
 
 	@PostMapping

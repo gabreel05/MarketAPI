@@ -14,9 +14,11 @@ import br.com.gabriel.model.User;
 import br.com.gabriel.repository.DemandRepository;
 import br.com.gabriel.repository.ProductRepository;
 import br.com.gabriel.repository.UserRepository;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
+@EnableSwagger2
 public class SprintEvaluation4Application implements CommandLineRunner {
 
 	private ProductRepository productRepository;

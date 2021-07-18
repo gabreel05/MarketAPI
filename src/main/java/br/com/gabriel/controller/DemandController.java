@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.DemandRequest;
 import br.com.gabriel.mapper.response.DemandResponse;
 import br.com.gabriel.model.Demand;
@@ -49,7 +50,7 @@ public class DemandController {
 		Optional<Demand> demand = demandService.findDemand(id);
 
 		return demand.map(value -> ResponseEntity.ok().body(new DemandResponse(value)))
-				.orElseGet(() -> ResponseEntity.notFound().build());
+				.orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
 	}
 
 	@PutMapping("/{id}")

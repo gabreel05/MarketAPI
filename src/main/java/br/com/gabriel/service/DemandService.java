@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.DemandRequest;
 import br.com.gabriel.mapper.response.DemandResponse;
 import br.com.gabriel.model.Demand;
@@ -44,19 +45,19 @@ public class DemandService {
 	}
 
 	public DemandResponse update(Long id, DemandRequest demandRequest) {
-		Optional<Demand> optional = findDemand(id);
+		Demand demand = findById(id);
 
-		Demand demand = null;
-
-		if (optional.isPresent()) {
-			demand = demandRequest.update(id, demandRepository, productRepository);
-		}
+		demand = demandRequest.update(id, demandRepository, productRepository);
 
 		return new DemandResponse(demand);
 	}
 
 	public void deleteDemand(Long id) {
 		demandRepository.deleteById(id);
+	}
+
+	public Demand findById(Long id) {
+		return demandRepository.findById(id).orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
 	}
 
 }

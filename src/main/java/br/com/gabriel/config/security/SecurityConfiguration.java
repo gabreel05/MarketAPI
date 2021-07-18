@@ -46,24 +46,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.headers().frameOptions().disable()
-				.and().cors().and().csrf().disable()
-				.authorizeRequests()		
-				.antMatchers(HttpMethod.POST, "/auth").permitAll()
-				.antMatchers("/persons").permitAll()
-				.antMatchers("/persons/**").permitAll()
-				.antMatchers("/h2-console/**").permitAll()
-				.anyRequest().authenticated()
-				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.addFilterBefore(new TokenAuthenticationFilter(tokenService, userRepository),
-						UsernamePasswordAuthenticationFilter.class);
+			.headers().frameOptions().disable()
+			.and().cors().and().csrf().disable()
+			.authorizeRequests()		
+			.antMatchers(HttpMethod.POST, "/auth").permitAll()
+			.antMatchers("/persons").permitAll()
+			.antMatchers("/persons/**").permitAll()
+			.antMatchers("/h2-console/**").permitAll()
+			.anyRequest().authenticated()
+			.and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.addFilterBefore(new TokenAuthenticationFilter(tokenService, userRepository),
+					UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		super.configure(web);
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", 
+				"/configuration/**", "/swagger-resources/**");
 	}
 
 }

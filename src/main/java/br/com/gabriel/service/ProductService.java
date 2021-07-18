@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.gabriel.exception.NotFoundException;
 import br.com.gabriel.mapper.request.ProductRequest;
 import br.com.gabriel.mapper.response.ProductResponse;
 import br.com.gabriel.model.Product;
@@ -24,7 +25,7 @@ public class ProductService {
 
 	public Page<ProductResponse> findAll(String description, Pageable pagination) {
 		Page<Product> products;
-		
+
 		if (!description.isEmpty()) {
 			products = productRepository.findByDescription(description, pagination);
 		} else {
@@ -47,19 +48,19 @@ public class ProductService {
 	}
 
 	public ProductResponse update(Long id, ProductRequest productRequest) {
-		Optional<Product> optional = findProduct(id);
+		Product product = findById(id);
 
-		Product product = null;
-		
-		if (optional.isPresent()) {
-			product = productRequest.update(id, productRepository);
-		}
+		product = productRequest.update(id, productRepository);
 
 		return new ProductResponse(product);
 	}
 
 	public void deleteProduct(Long id) {
 		productRepository.deleteById(id);
+	}
+
+	public Product findById(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
 	}
 
 }
