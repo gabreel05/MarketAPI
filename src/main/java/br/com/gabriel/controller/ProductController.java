@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,6 +40,7 @@ public class ProductController {
 	}
 
 	@GetMapping
+	@Cacheable(value = "productList")
 	public ResponseEntity<Page<ProductResponse>> findAll(
 			@RequestParam(required = false, defaultValue = "") String description,
 			@PageableDefault(size = 100) Pageable pagination
@@ -56,6 +59,7 @@ public class ProductController {
 
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "productList", allEntries = true)
 	public ResponseEntity<ProductResponse> save(@RequestBody @Valid ProductRequest productRequest,
 			UriComponentsBuilder uriComponentsBuilder) {
 		ProductResponse product = productService.save(productRequest);
@@ -67,6 +71,7 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "productList", allEntries = true)
 	public ResponseEntity<ProductResponse> update(@PathVariable Long id, @RequestBody @Valid ProductRequest productRequest) {
 		ProductResponse product = productService.update(id, productRequest);
 		
@@ -75,6 +80,7 @@ public class ProductController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "productList", allEntries = true)
 	public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
 		productService.deleteProduct(id);
 		

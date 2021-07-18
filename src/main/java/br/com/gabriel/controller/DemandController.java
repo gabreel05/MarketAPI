@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,6 +39,7 @@ public class DemandController {
 	}
 
 	@GetMapping
+	@Cacheable(value = "demandList")
 	public ResponseEntity<Page<DemandResponse>> findAll(@PageableDefault(size = 100) Pageable pagination) {
 		Page<DemandResponse> demands = demandService.findAll(pagination);
 
@@ -50,17 +53,9 @@ public class DemandController {
 		return ResponseEntity.ok().body(new DemandResponse(demand));
 	}
 
-	@PutMapping("/{id}")
-	@Transactional
-	public ResponseEntity<DemandResponse> update(@PathVariable Long id,
-			@RequestBody @Valid DemandRequest demandRequest) {
-		DemandResponse demand = demandService.update(id, demandRequest);
-
-		return ResponseEntity.ok().body(demand);
-	}
-
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "demandList", allEntries = true)
 	public ResponseEntity<DemandResponse> save(@RequestBody @Valid DemandRequest demandRequest,
 			UriComponentsBuilder uriComponentsBuilder) {
 		DemandResponse demand = demandService.save(demandRequest);
@@ -70,8 +65,21 @@ public class DemandController {
 		return ResponseEntity.created(uri).body(demand);
 	}
 
+	@PutMapping("/{id}")
+	@Transactional
+	@CacheEvict(value = "demandList", allEntries = true)
+	public ResponseEntity<DemandResponse> update(@PathVariable Long id,
+			@RequestBody @Valid DemandRequest demandRequest) {
+		DemandResponse demand = demandService.update(id, demandRequest);
+
+		return ResponseEntity.ok().body(demand);
+	}
+
+	
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "demandList", allEntries = true)
+
 	public ResponseEntity<Void> deleteDemand(@PathVariable Long id) {
 		demandService.deleteDemand(id);
 

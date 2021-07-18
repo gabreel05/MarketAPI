@@ -5,6 +5,8 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,6 +40,7 @@ public class PersonController {
 	}
 
 	@GetMapping
+	@Cacheable(value = "personList")
 	public ResponseEntity<Page<PersonResponse>> findAll(
 			@RequestParam(required = false, defaultValue = "") String name,
 			@RequestParam(required = false, defaultValue = "") String gender,
@@ -57,6 +60,7 @@ public class PersonController {
 
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "personList", allEntries = true)
 	public ResponseEntity<PersonResponse> save(@RequestBody @Valid PersonRequest personRequest,
 			UriComponentsBuilder uriComponentsBuilder) {
 		PersonResponse person = personService.save(personRequest);
@@ -68,6 +72,7 @@ public class PersonController {
 
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "personList", allEntries = true)
 	public ResponseEntity<PersonResponse> update(@PathVariable Long id,
 			@RequestBody @Valid PersonRequest personRequest) {
 		PersonResponse person = personService.update(id, personRequest);
@@ -77,6 +82,7 @@ public class PersonController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "personList", allEntries = true)
 	public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
 		personService.deletePerson(id);
 
