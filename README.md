@@ -11,6 +11,14 @@
 #### Abrir o projeto no seu editor de preferência (Eclipse, IntelliJ, VS Code) e iniciar a classe principal ``SpringEvaluation4Application.java``.
 #### As requisições do tipo ``GET`` podem ser testadas através do navagador, porém para testar a API em apenas um lugar, recomendam-se os ‘softwares’ ``Postman`` e ``Insomnia``.
 
+## Esse projeto já possui alguns dados inseridos para exemplo. Para testar o endpoint ``/auth`` favor utilizar o seguinte usuário e senha.
+```json
+{
+  "username": "gabriel",
+  "password": "123456"
+}
+```
+
 ## Endpoints
 
 # ``/persons``
