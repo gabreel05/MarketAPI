@@ -4,12 +4,12 @@ import java.text.ParseException;
 
 import javax.swing.text.MaskFormatter;
 
-public class DocumentFormatter {
+public class ZipCodeFormatter {
 
-	public static String formatDocument(String document) {
+	public static String formatZipCode(Integer zipCode) {
 		MaskFormatter formatter = null;
 		try {
-			formatter = new MaskFormatter("###.###.###-##");
+			formatter = new MaskFormatter("#####-###");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -18,12 +18,12 @@ public class DocumentFormatter {
 		String formattedDocument = null;
 
 		try {
-			formattedDocument = formatter.valueToString(document);
+			formattedDocument = formatter.valueToString(zipCode);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
 		return formattedDocument;
 	}
-
+	
 }

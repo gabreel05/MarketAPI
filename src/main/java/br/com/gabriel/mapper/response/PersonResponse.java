@@ -15,7 +15,7 @@ public class PersonResponse {
 	public PersonResponse(Person person) {
 		this.id = person.getId();
 		this.name = person.getName();
-		this.document = DocumentFormatter.documentFormatter(person.getDocument());
+		this.document = DocumentFormatter.formatDocument(person.getDocument());
 		this.wage = MoneyConverter.convertDoubleToCurrency(person.getWage());
 		this.gender = person.getGender();
 		this.addresses = AddressResponse.toAddressList(person.getAddresses());
