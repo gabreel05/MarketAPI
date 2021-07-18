@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import br.com.gabriel.model.Person;
+import br.com.gabriel.util.MoneyConverter;
 import lombok.Getter;
 
 @Getter
@@ -14,7 +15,7 @@ public class PersonResponse {
 		this.id = person.getId();
 		this.name = person.getName();
 		this.document = person.getDocument();
-		this.wage = person.getWage();
+		this.wage = MoneyConverter.convertDoubleToCurrency(person.getWage());
 		this.gender = person.getGender();
 		this.addresses = AddressResponse.toAddressList(person.getAddresses());
 	}
@@ -22,7 +23,7 @@ public class PersonResponse {
 	private Long id;
 	private String name;
 	private String document;
-	private Double wage;
+	private String wage;
 	private String gender;
 	private List<AddressResponse> addresses;
 	

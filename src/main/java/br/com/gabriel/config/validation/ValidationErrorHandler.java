@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.gabriel.exception.NotFoundException;
+
 @RestControllerAdvice
 public class ValidationErrorHandler {
 
@@ -24,10 +26,17 @@ public class ValidationErrorHandler {
 	public ValidationErrorHandler(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
+	
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(NotFoundException.class)
+	public ErrorResponse handleNotFound(NotFoundException exception, HttpServletRequest request) {
+		return new ErrorResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.name(),
+				exception.getMessage(), request.getServletPath());
+	}
 
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public List<ErrorResponse> handle(MethodArgumentNotValidException exception, HttpServletRequest request) {
+	public List<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpServletRequest request) {
 		List<ErrorResponse> errors = new ArrayList<ErrorResponse>();
 
 		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
